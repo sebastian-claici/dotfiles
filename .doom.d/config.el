@@ -19,7 +19,7 @@
 ;;
 ;; They all accept either a font-spec, font string ("Input Mono-12"), or xlfd
 ;; font string. You generally only need these two:
-(setq doom-font (font-spec :family "Noto Sans Mono" :size 16)
+(setq doom-font (font-spec :family "Roboto Mono" :size 16)
       doom-variable-pitch-font (font-spec :family "EBGaramond" :size 20))
 
 ;; There are two ways to load a theme. Both assume the theme is installed and
@@ -46,9 +46,6 @@
 ;; yasnippet triggers within snippet
 (setq yas-triggers-in-field t)
 
-;; British spelling everywhere
-(setq ispell-dictionary "british")
-
 ;; auto save at regular intervals
 (use-package! super-save
   :config
@@ -61,8 +58,8 @@
 
   (setq org-file-apps
         '((auto-mode . emacs)
-          ("\\.x?html?\\'" . "firefox %s")
-          ("\\.pdf\\(::[0-9]+\\)?\\'" . "evince %s")
+          ("\\.x?html?\\'" . "brave %s")
+          ("\\.pdf\\(::[0-9]+\\)?\\'" . "zathura %s")
           ("\\.gif\\'" . "eog \"%s\"")
           ("\\.png\\'" . "feh %s")
           ("\\.jpg\\'" . "feh %s")
@@ -207,7 +204,7 @@
 (use-package! org-download
   :after org
   :config
-  (setq org-download-screenshot-method "gnome-screenshot -a -f %s")
+  (setq org-download-screenshot-method "scrot -s %s")
   (setq org-download-method 'directory)
   (setq-default org-download-image-dir (concat org-directory "figures/misc")))
 
@@ -225,12 +222,12 @@
                           "#+OPTIONS: TeX:t LaTeX:t todo:t\n"
                           "#+LATEX_CLASS: koma-article\n"
                           "#+LATEX_HEADER: \\usepackage{ebgaramond}\n"
-                          "#+LATEX_HEADER: \\usepackage{titlesec}\n"
                           "#+LaTeX_HEADER: \\usepackage{mathtools}\n"
                           "#+LaTeX_HEADER: \\usepackage{amsmath}\n"
                           "#+LaTeX_HEADER: \\usepackage{amssymb}\n"
                           "#+LaTeX_HEADER: \\usepackage{fullpage}\n"
                           "#+LaTeX_HEADER: \\usepackage{graphicx}\n"
+                          "#+LaTeX_HEADER: \\usepackage{natbib}\n"
                           "#+LaTeX_HEADER: \\usepackage{parskip}\n")
            :unnarrowed t)))
   (map! :leader
@@ -373,49 +370,6 @@
 (setq writeroom-width 120)
 (setq writeroom-mode-line 't)
 
-;; Configure mu4e
-(add-to-list 'load-path "/usr/local/share/emacs/site-lisp/mu4e")
-(after! mu4e
-  (setq! mu4e-maildir (expand-file-name "~/email/uni") ; the rest of the mu4e folders are RELATIVE to this one
-         mu4e-get-mail-command "offlineimap"
-         mu4e-index-update-in-background t
-         mu4e-compose-signature-auto-include t
-         mu4e-use-fancy-chars t
-         mu4e-view-show-addresses t
-         mu4e-view-show-images t
-         mu4e-compose-format-flowed t
-         ;mu4e-compose-in-new-frame t
-         mu4e-change-filenames-when-moving t ;; http://pragmaticemacs.com/emacs/fixing-duplicate-uid-errors-when-using-mbsync-and-mu4e/
-         mu4e-maildir-shortcuts
-         '( ("/Inbox" . ?i)
-            ("/Archive" . ?a)
-            ("/Drafts" . ?d)
-            ("/Deleted Items" . ?t)
-            ("/Sent Items" . ?s))
-
-         ;; Message Formatting and sending
-         message-send-mail-function 'smtpmail-send-it
-         message-citation-line-format "On %a %d %b %Y at %R, %f wrote:\n"
-         message-citation-line-function 'message-insert-formatted-citation-line
-         message-kill-buffer-on-exit t
-         ))
-
-(set-email-account! "sclaici@csail.mit.edu"
-                    '((user-mail-address      . "sclaici@csail.mit.edu")
-                      (user-full-name         . "Sebastian Claici")
-                      (smtpmail-smtp-server   . "outgoing.csail.mit.edu")
-                      (smtpmail-smtp-service  . 587)
-                      (smtpmail-stream-type   . starttls)
-                      (smtpmail-debug-info    . t)
-                      (mu4e-drafts-folder     . "/Drafts")
-                      (mu4e-refile-folder     . "/Archive")
-                      (mu4e-sent-folder       . "/Sent Items")
-                      (mu4e-trash-folder      . "/Deleted Items")
-                      (mu4e-update-interval   . 1800)
-                      ;(mu4e-sent-messages-behavior . 'delete)
-                      )
-                    nil)
-
 ;; Configure org-reveal
 (setq org-reveal-root "file:///home/sebii/bin/reveal.js")
 
@@ -427,6 +381,7 @@
         :prefix "m"
         :desc "mathpix grab" "a m" #'mathpix-screenshot)
   :config
+  (setq mathpix-screenshot-method "scrot -s %s")
   (setq mathpix-app-id "sebastianclaici_gmail_com_4ea397"
         mathpix-app-key "ec17fadc20cc4b8697b8"))
 
