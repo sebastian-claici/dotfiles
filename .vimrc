@@ -35,6 +35,7 @@ Plug 'junegunn/fzf.vim'
 Plug 'preservim/nerdtree'
 Plug 'justinmk/vim-sneak'
 Plug 'itchyny/lightline.vim'
+Plug 'rust-lang/rust.vim'
 
 call plug#end()
 
@@ -45,6 +46,14 @@ let mapleader=" "
 nmap <leader>cd <Plug>(coc-definition)
 nmap <leader>cD <Plug>(coc-references)
 nnoremap <leader><leader> :GFiles<CR>
+
+" Use tab for trigger completion with characters ahead and navigate.
+" NOTE: Use command ':verbose imap <tab>' to make sure tab is not mapped by
+" other plugin before putting this into your config.
+inoremap <silent><expr> <S-TAB>
+      \ pumvisible() ? "\<C-n>" :
+      \ <SID>check_back_space() ? "\<TAB>" :
+      \ coc#refresh()
 
 nnoremap <C-h> <C-w>h
 nnoremap <C-j> <C-w>j
@@ -57,3 +66,6 @@ nnoremap <leader>* :Rg<SPACE>
 
 map H ^
 map L $
+
+" Rust language niceties
+let g:rustfmt_autosave = 1
