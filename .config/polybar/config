@@ -21,11 +21,25 @@
 background = #222
 background-alt = #444
 ;foreground = ${xrdb:color7:#222}
-foreground = #dfdfdf
-foreground-alt = #555
+;foreground = #dfdfdf
+;foreground-alt = #666
 primary = #ffb52a
 secondary = #e60053
 alert = #bd2c40
+
+base0 = #20201d
+base1 = #292824
+base2 = #6e6b5e
+base3 = #7d7a68
+base5 = #a6a28c
+foreground = #e8e4cf
+white = #e8e4cf
+red = #d73737
+yellow = #ae9513
+orange = #b65611
+green = #60ac39
+cyan = #1fad83
+magenta = #d43552
 
 [bar/example]
 ;monitor = ${env:MONITOR:HDMI-1}
@@ -51,19 +65,19 @@ padding-right = 2
 module-margin-left = 1
 module-margin-right = 2
 
-font-0 = "Noto Sans Mono:size=10;1"
-font-1 = FontAwesome:size=8;-2
-font-2 = ypn envypn:size=10;-1
-font-3 = Termsynu:size=8;-1
-font-4 = Unifont:size=6;-3
+font-0 = "Roboto Mono:size=11;1"
+font-1 = "Material Icons:size=15;2"
+font-2 = "Font Awesome:size=10;1"
+font-3 = "Weather Icons:size=10;1"
+font-4 = "Noto Color Emoji:scale=9;2"
 
 modules-left = bspwm i3
-modules-center = spotify
-modules-right = xbacklight pulseaudio cpu wlan eth battery date
+modules-center = mpd
+modules-right = alsa xbacklight battery weather eth wlan date calendar
 
 tray-position = right
 tray-padding = 2
-;tray-background = #0063ff
+tray-background = ${colors.base2}
 
 ;wm-restack = bspwm
 ;wm-restack = i3
@@ -146,6 +160,7 @@ ws-icon-2 = code;
 ws-icon-3 = music;
 ws-icon-4 = book;
 ws-icon-5 = email;
+ws-icon-6 = games;
 ws-icon-default = 
 
 ; Only show workspaces on the same output as the bar
@@ -179,6 +194,13 @@ label-urgent-padding = 2
 ; Separator in between workspaces
 ; label-separator = |
 
+[module/weather]
+type = custom/script
+interval = 20
+
+format = <label>
+; exec = curl -s wttr.in/?format="%c+%t"
+
 [module/spotify]
 type = custom/script
 interval = 1
@@ -189,33 +211,21 @@ format-underline = #1db954
 
 [module/mpd]
 type = internal/mpd
-format-online = <label-song>  <icon-prev> <icon-stop> <toggle> <icon-next>
+format-online = <label-song>
+format-online-prefix = " "
 
-icon-prev = 
-icon-stop = 
-icon-play = 
-icon-pause = 
-icon-next = 
-
-label-song-maxlen = 25
+label-song-maxlen = 30
 label-song-ellipsis = true
 
 [module/xbacklight]
 type = internal/xbacklight
 
-format = <label> <bar>
-label = bl
+card = intel_backlight
 
-bar-width = 10
-bar-indicator = |
-bar-indicator-foreground = #fff
-bar-indicator-font = 2
-bar-fill = ─
-bar-fill-font = 2
-bar-fill-foreground = #9f78e1
-bar-empty = ─
-bar-empty-font = 2
-bar-empty-foreground = ${colors.foreground-alt}
+format = <label>
+format-prefix = " "
+format-prefix-foreground = ${colors.yellow}
+label = %percentage%
 
 [module/backlight-acpi]
 inherit = module/xbacklight
@@ -244,9 +254,8 @@ interface = wlp2s0
 interval = 3.0
 
 format-connected = <label-connected>
-format-connected-prefix = "wlan "
-format-connected-prefix-foreground = ${colors.foreground-alt}
-format-connected-underline = #9f78e1
+format-connected-prefix = " "
+format-connected-prefix-foreground = ${colors.white}
 label-connected = %essid%
 
 format-disconnected =
@@ -254,13 +263,6 @@ format-disconnected =
 ;format-disconnected-underline = ${self.format-connected-underline}
 ;label-disconnected = %ifname% disconnected
 ;label-disconnected-foreground = ${colors.foreground-alt}
-ramp-signal-0 = 
-ramp-signal-1 = 
-ramp-signal-2 = 
-ramp-signal-3 = 
-ramp-signal-4 = 
-
-ramp-signal-foreground = ${colors.foreground-alt}
 
 [module/eth]
 type = internal/network
@@ -288,21 +290,34 @@ format-underline = #0a6cf5
 
 date = %%{F#bb}%Y-%m-%d%%{F-}  %%{F#ee}%H:%M%%{F-}
 
+[module/calendar]
+type = internal/date
+interval = 5
+
+date = "%b %d"
+label =  %date%
+
+; format-foreground = ${colors.base1}
+; format-background = ${colors.base5}
+; format-padding = 1
+
 [module/date]
 type = internal/date
 interval = 5
 
-date = "%Y-%m-%d"
+date = "%b %d"
 date-alt = " %Y-%m-%d"
 
 time = %H:%M
 time-alt = %H:%M:%S
 
-format-prefix = 
-format-prefix-foreground = ${colors.foreground-alt}
-format-underline = #0a6cf5
+format-prefix = " "
+; format-prefix-background = ${colors.base5}
+; format-foreground = ${colors.base1}
+; format-background = ${colors.base5}
+; format-padding = 2
 
-label = %date% %time%
+label =  %time%
 
 [module/pulseaudio]
 type = internal/pulseaudio
@@ -334,30 +349,17 @@ bar-volume-empty-foreground = ${colors.foreground-alt}
 [module/alsa]
 type = internal/alsa
 
-format-volume = <label-volume> <bar-volume>
-label-volume = VOL
-label-volume-foreground = ${root.foreground}
+format-volume = <label-volume>
+format-volume-prefix = " "
+format-volume-prefix-foreground = ${colors.cyan}
+label-volume = %percentage%%
+label-volume-foreground = ${colors.foreground}
 
-format-muted-prefix = " "
-format-muted-foreground = ${colors.foreground-alt}
-label-muted = sound muted
-
-bar-volume-width = 10
-bar-volume-foreground-0 = #55aa55
-bar-volume-foreground-1 = #55aa55
-bar-volume-foreground-2 = #55aa55
-bar-volume-foreground-3 = #55aa55
-bar-volume-foreground-4 = #55aa55
-bar-volume-foreground-5 = #f5a70a
-bar-volume-foreground-6 = #ff5555
-bar-volume-gradient = false
-bar-volume-indicator = |
-bar-volume-indicator-font = 2
-bar-volume-fill = ─
-bar-volume-fill-font = 2
-bar-volume-empty = ─
-bar-volume-empty-font = 2
-bar-volume-empty-foreground = ${colors.foreground-alt}
+format-muted-prefix = " "
+format-muted-prefix-foreground = ${colors.magenta}
+# format-muted-prefix = "muted "
+# format-muted-foreground = ${colors.foreground-alt}
+# label-muted = muted
 
 [module/battery]
 type = internal/battery
@@ -365,67 +367,27 @@ battery = BAT0
 adapter = AC
 full-at = 98
 
-format-charging = <label-charging>
-format-charging-prefix = "bat "
-format-charging-prefix-foreground = ${colors.foreground-alt}
-format-charging-underline = #ffb52a
+format-charging = <ramp-capacity> <label-charging>
+; format-charging-foreground = ${colors.yellow}
+; format-charging-underline = #ffb52a
 
-format-discharging = <label-discharging>
-format-discharging-prefix = "bat "
-format-discharging-prefix-foreground = ${colors.foreground-alt}
-format-discharging-underline = #ff8800
+format-discharging = <ramp-capacity> <label-discharging>
+; format-discharging-foreground = ${colors.orange}
+; format-discharging-underline = #ff8800
 
-format-full-prefix = "bat "
-format-full-prefix-foreground = ${colors.foreground-alt}
-format-full-underline = #88ff00
+format-full = <ramp-capacity> <label-full>
+; format-full-foreground = ${colors.green}
 
-[module/temperature]
-type = internal/temperature
-thermal-zone = 0
-warn-temperature = 60
-
-format = <ramp> <label>
-format-underline = #f50a4d
-format-warn = <ramp> <label-warn>
-format-warn-underline = ${self.format-underline}
-
-label = %temperature-c%
-label-warn = %temperature-c%
-label-warn-foreground = ${colors.secondary}
-
-ramp-0 = 
-ramp-1 = 
-ramp-2 = 
-ramp-foreground = ${colors.foreground-alt}
-
-[module/powermenu]
-type = custom/menu
-
-expand-right = true
-
-format-spacing = 1
-
-label-open = 
-label-open-foreground = ${colors.secondary}
-label-close =  cancel
-label-close-foreground = ${colors.secondary}
-label-separator = |
-label-separator-foreground = ${colors.foreground-alt}
-
-menu-0-0 = reboot
-menu-0-0-exec = menu-open-1
-menu-0-1 = power off
-menu-0-1-exec = menu-open-2
-
-menu-1-0 = cancel
-menu-1-0-exec = menu-open-0
-menu-1-1 = reboot
-menu-1-1-exec = sudo reboot
-
-menu-2-0 = power off
-menu-2-0-exec = sudo poweroff
-menu-2-1 = cancel
-menu-2-1-exec = menu-open-0
+; format-full-underline = #88ff00
+ramp-capacity-0 = 
+ramp-capacity-1 = 
+ramp-capacity-1-foreground = ${colors.red}
+ramp-capacity-2 = 
+ramp-capacity-2-foreground = ${colors.orange}
+ramp-capacity-3 = 
+ramp-capacity-3-foreground = ${colors.yellow}
+ramp-capacity-4 = 
+ramp-capacity-4-foreground = ${colors.green}
 
 [settings]
 screenchange-reload = true

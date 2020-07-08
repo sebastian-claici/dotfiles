@@ -1,13 +1,8 @@
-# Shortcuts
-key_bindings:
-    - { key: V,     mods: Alt, action: Paste        }
-    - { key: C,     mods: Alt, action: Copy         }
-
 # Font configuration
 font:
     normal:
-        family: "Noto Sans Mono"
-    size: 12.0
+        family: "Roboto Mono"
+    size: 13.0
 
 # Base16 Gruvbox dark, hard 256 - alacritty color config
 # Dawid Kurek (dawikur@gmail.com), morhetz (https://github.com/morhetz/gruvbox)
@@ -52,82 +47,10 @@ colors:
     - { index: 20, color: '0xbdae93' }
     - { index: 21, color: '0xebdbb2' }
 
-# # Base16 Gruvbox dark, hard - alacritty color config
-# # Dawid Kurek (dawikur@gmail.com), morhetz (https://github.com/morhetz/gruvbox)
-# colors:
-#   # Default colors
-#   primary:
-#     background: '0x1d2021'
-#     foreground: '0xd5c4a1'
-# 
-#   # Colors the cursor will use if `custom_cursor_colors` is true
-#   cursor:
-#     text: '0x1d2021'
-#     cursor: '0xd5c4a1'
-# 
-#   # Normal colors
-#   normal:
-#     black:   '0x1d2021'
-#     red:     '0xfb4934'
-#     green:   '0xb8bb26'
-#     yellow:  '0xfabd2f'
-#     blue:    '0x83a598'
-#     magenta: '0xd3869b'
-#     cyan:    '0x8ec07c'
-#     white:   '0xd5c4a1'
-# 
-#   # Bright colors
-#   bright:
-#     black:   '0x665c54'
-#     red:     '0xfe8019'
-#     green:   '0x3c3836'
-#     yellow:  '0x504945'
-#     blue:    '0xbdae93'
-#     magenta: '0xebdbb2'
-#     cyan:    '0xd65d0e'
-#     white:   '0xfbf1c7'
-# 
-# draw_bold_text_with_bright_colors: false
 
-# # Base16 Atelier Dune 256 - alacritty color config
-# # Bram de Haan (http://atelierbramdehaan.nl)
-# colors:
-#   # Default colors
-#   primary:
-#     background: '0x20201d'
-#     foreground: '0xa6a28c'
-# 
-#   # Colors the cursor will use if `custom_cursor_colors` is true
-#   cursor:
-#     text: '0x20201d'
-#     cursor: '0xa6a28c'
-# 
-#   # Normal colors
-#   normal:
-#     black:   '0x20201d'
-#     red:     '0xd73737'
-#     green:   '0x60ac39'
-#     yellow:  '0xae9513'
-#     blue:    '0x6684e1'
-#     magenta: '0xb854d4'
-#     cyan:    '0x1fad83'
-#     white:   '0xa6a28c'
-# 
-#   # Bright colors
-#   bright:
-#     black:   '0x7d7a68'
-#     red:     '0xd73737'
-#     green:   '0x60ac39'
-#     yellow:  '0xae9513'
-#     blue:    '0x6684e1'
-#     magenta: '0xb854d4'
-#     cyan:    '0x1fad83'
-#     white:   '0xfefbec'
-# 
-#   indexed_colors:
-#     - { index: 16, color: '0xb65611' }
-#     - { index: 17, color: '0xd43552' }
-#     - { index: 18, color: '0x292824' }
-#     - { index: 19, color: '0x6e6b5e' }
-#     - { index: 20, color: '0x999580' }
-#     - { index: 21, color: '0xe8e4cf' }
+key_bindings:
+  - { key: V,        mods: Alt,       action: Paste                        }
+  - { key: C,        mods: Alt,       action: Copy                         }
+  - { key: Q,        mods: Alt,       action: Quit                         }
+  - { key: N,        mods: Alt,       action: SpawnNewInstance             }
+  - { key: Return,   mods: Alt,       action: ToggleFullscreen             }
