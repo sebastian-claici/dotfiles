@@ -19,17 +19,27 @@
 ;;
 ;; They all accept either a font-spec, font string ("Input Mono-12"), or xlfd
 ;; font string. You generally only need these two:
-(setq doom-font (font-spec :family "Roboto Mono" :size 16)
+(setq doom-font (font-spec :family "Roboto Mono Light" :size 16)
       doom-variable-pitch-font (font-spec :family "EBGaramond" :size 20))
+
+;; increase garbage collection size
+(setq gc-cons-threshold 1000000000)
+
+;; org-protocol
+(server-start)
+(require 'org-protocol)
 
 ;; There are two ways to load a theme. Both assume the theme is installed and
 ;; available. You can either set `doom-theme' or manually load a theme with the
 ;; `load-theme' function. This is the default:
-(setq doom-theme 'doom-gruvbox)
+(setq doom-theme 'doom-one-light)
 
 ;; Doom modeline display word count in org mode
 (setq doom-modeline-major-mode-icon t)
 (setq doom-modeline-continuous-word-count-modes '(markdown-mode gfm-mode org-mode))
+
+;; Default dictionary is british
+(setq ispell-dictionary "british")
 
 ;; Disable mouse focus
 (setq focus-follows-mouse nil)
@@ -51,18 +61,28 @@
   :config
   (super-save-mode +1))
 
+;; peep-dired key remap
+(evil-define-key 'normal peep-dired-mode-map (kbd "<SPC>") 'peep-dired-scroll-page-down
+                                             (kbd "C-<SPC>") 'peep-dired-scroll-page-up
+                                             (kbd "<backspace>") 'peep-dired-scroll-page-up
+                                             (kbd "j") 'peep-dired-next-file
+                                             (kbd "k") 'peep-dired-prev-file)
+(add-hook 'peep-dired-hook 'evil-normalize-keymaps)
+
 ;; Org visual configuration
 (after! org
   (add-to-list 'org-modules 'org-habit t)
   (add-to-list 'org-modules 'org-drill t)
 
+  (setq org-indirect-buffer-display 'other-window)
+ 
   (setq org-file-apps
         '((auto-mode . emacs)
-          ("\\.x?html?\\'" . "brave %s")
+          ("\\.x?html?\\'" . "firefox %s")
           ("\\.pdf\\(::[0-9]+\\)?\\'" . "zathura %s")
           ("\\.gif\\'" . "eog \"%s\"")
-          ("\\.png\\'" . "feh %s")
-          ("\\.jpg\\'" . "feh %s")
+          ("\\.png\\'" . "sxiv %s")
+          ("\\.jpg\\'" . "sxiv %s")
           ("\\.mp4\\'" . "vlc \"%s\"")
           ("\\.mkv" . "vlc \"%s\"")))
 
@@ -161,6 +181,9 @@
                "\n\nDefine\n** Word\n\n** Definition\n%?\n"))
      )))
 
+;; async org babel blocks
+(require 'ob-async)
+
 ;; Deft basic configuration
 (use-package! deft
   :config
@@ -253,7 +276,7 @@
 ;; Configure org-roam-bibtex
 (use-package org-roam-bibtex
   :after org-roam
-  :hook (org-roam-mode . org-roam-bibtex-mode)
+  :hook (org-mode . org-roam-bibtex-mode)
   :bind (:map org-mode-map
          (("C-c n a" . orb-note-actions)))
   :config
@@ -273,6 +296,23 @@
 
 * ${title}"))))
 
+(defun formatted-citation-at-point ()
+  "Kill the formatted citation for the reference at point using Pandoc."
+  (interactive)
+  (let* ((bibfile (expand-file-name (car (org-ref-find-bibliography))))
+	 (cslfile (concat (file-name-directory bibfile) "chicago-author-date.csl")))
+    (kill-new
+     (shell-command-to-string
+      (format
+       "echo cite:%s | pandoc --filter=pandoc-citeproc --bibliography=%s --csl=%s -f org -t markdown_strict | tail -n +3"
+       (org-ref-get-bibtex-key-under-cursor)
+       bibfile
+       cslfile)))))
+
+(map! :leader
+      :prefix "m"
+      :desc "get formatted citation at point" "c" #'formatted-citation-at-point)
+
 ;; org-noter
 (use-package! org-noter
   :after org
@@ -280,9 +320,9 @@
   (setq org-noter-auto-save-last-location 't)
   (setq org-noter-doc-split-fraction '(0.6 . 0.4)))
 
-;; org-protocol
-(server-start)
-(require 'org-protocol)
+(add-hook 'org-noter-notes-mode-hook
+          (lambda ()
+            (set-fill-column 60)))
 
 ;; org-journal
 (use-package! org-journal
@@ -360,15 +400,20 @@
 (setq org-books-file (concat org-directory "books.org"))
 
 ;; Writer aids
-(setq focus-current-thing 'paragraph)
+(setq writeroom-width 80)
+(setq writeroom-border-width 80)
+(setq writeroom-maximize-window t)
 
-(map! :leader
-      :prefix "n"
-      :desc "focus mode" "+" #'focus-mode)
+(add-hook 'writeroom-mode-hook
+          (lambda ()
+            (set-fill-column 120)))
+(add-hook 'writeroom-mode-disable-hook
+          (lambda ()
+            (set-fill-column 80)))
 
-(setq +zen-text-scale 1.5)
-(setq writeroom-width 120)
-(setq writeroom-mode-line 't)
+;; disable line-numbers in writeroom mode
+(add-hook 'writeroom-mode-hook 'menu-bar--display-line-numbers-mode-none)
+(add-hook 'writeroom-mode-disable-hook 'menu-bar--display-line-numbers-mode-relative)
 
 ;; Configure org-reveal
 (setq org-reveal-root "file:///home/sebii/bin/reveal.js")

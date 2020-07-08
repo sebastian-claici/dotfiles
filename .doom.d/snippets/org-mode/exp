@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: exp
+# uuid: exp
+# key: exp
+# condition: t     
+# --
+\exp\left\\{$1\right\\}$0

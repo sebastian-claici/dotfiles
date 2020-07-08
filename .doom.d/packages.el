@@ -14,6 +14,9 @@
 ;; org-roam-bibtex
 (package! org-roam-bibtex)
 
+;; writer aids
+(package! wc-mode)
+
 ;; org2blog integration
 (package! org2blog)
 
@@ -29,11 +32,8 @@
 (package! mathpix
   :recipe (:host github :repo "jethrokuan/mathpix.el"))
 
-;; writer aids
-;; olivetti as an alternative to writeroom
-(package! olivetti)
-;; focus mode
-(package! focus)
+;; image previews in dired
+(package! peep-dired)
 
 ;; To install SOME-PACKAGE from MELPA, ELPA or emacsmirror:
 ;(package! some-package)

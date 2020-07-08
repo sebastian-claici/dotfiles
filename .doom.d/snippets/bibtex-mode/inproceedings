@@ -1,0 +1,13 @@
+# -*- mode: snippet -*-
+# name: inproceedings
+# uuid: inproceedings
+# key: proc
+# condition: t
+# --
+@inproceedings{$1,
+author = {$2},
+title = {$3},
+booktitle = {$4},
+year = {$5}
+}
+$0
